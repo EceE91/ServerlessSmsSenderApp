@@ -34,8 +34,20 @@
           {
             "resourceName": "apigusEast1SMSGatewaysendSmspost",
             "config": {}
+          },
+          {
+            "resourceName": "cweTimer",
+            "config": {}
           }
-        ]
+        ],
+        "testCases": {
+          "d9782dec-c24e-4926-bf16-05b1834f172e": {
+            "id": "d9782dec-c24e-4926-bf16-05b1834f172e",
+            "name": "handler",
+            "functionId": "66f8c4e2-05f1-4ad1-b155-6a3bd8f58c1a",
+            "event": "{\n \"receiver\": \"+35699316313\", \n \"sender\": \"MySMS\",\n \"message\": \"Hello there! How are you doing?\"\n}"
+          }
+        }
       }
     },
     "deletedFiles": [],
@@ -73,6 +85,20 @@
             "@{receiver}"
           ]
         }
+      },
+      "cweTimer": {
+        "name": "cweTimer",
+        "type": "CLOUD_WATCH",
+        "config": {
+          "mode": 0,
+          "name": "Timer",
+          "description": "",
+          "eventPattern": {
+            "source": [
+              "aws.autoscaling"
+            ]
+          }
+        }
       }
     },
     "customTemplate": {
@@ -108,7 +134,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1565456416056
+    "lastSave": 1565465972570
   },
   "VCS_STATE": {
     "provider": "GitHub",
