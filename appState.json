@@ -93,11 +93,7 @@
           "mode": 0,
           "name": "Timer",
           "description": "",
-          "eventPattern": {
-            "source": [
-              "aws.autoscaling"
-            ]
-          }
+          "scheduleExpression": "rate(5 minutes)"
         }
       }
     },
@@ -134,7 +130,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1565465972570
+    "lastSave": 1565467929681
   },
   "VCS_STATE": {
     "provider": "GitHub",
