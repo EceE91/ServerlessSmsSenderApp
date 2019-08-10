@@ -1,0 +1,120 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "3d31d86a-eb2e-453f-8c87-c70000e45d21": {
+        "id": "3d31d86a-eb2e-453f-8c87-c70000e45d21",
+        "parent": null,
+        "name": "ServerlessSmsSenderApp",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "66f8c4e2-05f1-4ad1-b155-6a3bd8f58c1a"
+        ],
+        "isRemovable": false,
+        "filePath": "ServerlessSmsSenderApp"
+      },
+      "66f8c4e2-05f1-4ad1-b155-6a3bd8f58c1a": {
+        "id": "66f8c4e2-05f1-4ad1-b155-6a3bd8f58c1a",
+        "parent": "3d31d86a-eb2e-453f-8c87-c70000e45d21",
+        "name": "lambda.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "ServerlessSmsSenderApp/lambda.js",
+        "code": "//  API Gateway (as POST request) endpoint to accept requests and set it as the trigger for lambda function\n\nlet AWS = require('aws-sdk');\nconst sns = new AWS.SNS();\n\nexports.handler = function (event, context, callback) {\n\n\n    // the request payload received by the API will be injected to \n    // the lambda function as the event object. \n    // we only have to extract the information from the event object \n    // and assign them to variables for further\n    let receiver = event['receiver'];\n    let sender = event['sender'];\n    let message = event['message']; // description\n\n\n    // Transactional type should be used for Critical messages that support customer transactions\n    // Promotional type used for non-critical messages, such as marketing messages\n    let isPromotional = true;\n\n    console.log(\"Sending message\", message, \"to receiver\", receiver);\n\n    sns.publish({\n        Message: message,\n        MessageAttributes: {\n            'AWS.SNS.SMS.SMSType': {\n                'DataType': 'String',\n                'StringValue': 'Promotional'\n            },\n            'AWS.SNS.SMS.SenderID': {\n                'DataType': 'String',\n                'StringValue': sender\n            }\n        },\n        PhoneNumber: receiver\n    }).promise()\n        .then(data => {\n            console.log(\"Sent message to\", receiver);\n\t\t\tcallback(null, data);\n        })\n        .catch(err => {\n            console.log(\"Sending failed\", err);\n\t\t\tcallback(err);\n        });\n        \n    // sns is dragged here\n    callback(null, { \"notification\": \"Successfully executed\" });\n}\n\n",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [
+          {
+            "resourceName": "apigusEast1SMSGatewaysendSmspost",
+            "config": {}
+          }
+        ]
+      }
+    },
+    "deletedFiles": [],
+    "rootNode": "3d31d86a-eb2e-453f-8c87-c70000e45d21",
+    "openFiles": [
+      "66f8c4e2-05f1-4ad1-b155-6a3bd8f58c1a"
+    ],
+    "currentFileId": "66f8c4e2-05f1-4ad1-b155-6a3bd8f58c1a",
+    "resources": {
+      "apigusEast1SMSGatewaysendSmspost": {
+        "name": "apigusEast1SMSGatewaysendSmspost",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "us-east-1",
+          "apiMode": 0,
+          "apiName": "SMSGateway",
+          "endpointType": "EDGE",
+          "resourceMode": 0,
+          "resourceName": "sendSms",
+          "resourcePath": "/sendSms",
+          "restMethod": "POST",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "Prod",
+          "mode": 0
+        }
+      },
+      "snsDirectSMSResource": {
+        "name": "snsDirectSMSResource",
+        "type": "SNS",
+        "config": {
+          "snsType": 1,
+          "numbers": [
+            "@{receiver}"
+          ]
+        }
+      }
+    },
+    "customTemplate": {
+      "dialect": null,
+      "definitions": {}
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {
+        "aws-sdk": {
+          "name": "aws-sdk",
+          "language": "javascript",
+          "version": "2.176.0",
+          "dev": true,
+          "notRemovable": false
+        }
+      }
+    }
+  },
+  "PROJECT_META": {
+    "projectName": "ServerlessSmsSenderApp",
+    "projectDescription": "Enable users to get notifications via SMS",
+    "projectVersion": "1.0.0",
+    "projectRegion": "us-east-1",
+    "platform": "AWS",
+    "platformRegions": {},
+    "lastSave": 1565456416056
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "ServerlessSmsSenderApp",
+      "url": "https://github.com/EceE91/ServerlessSmsSenderApp"
+    }
+  }
+}
